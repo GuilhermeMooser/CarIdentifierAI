@@ -89,23 +89,32 @@ class ResultScreen extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Stack(
-                  children: [
-                    Image.file(
-                      imageFile,
-                      fit: BoxFit.contain,
-                      width: double.infinity,
-                    ),
-                    if (response.detections != null)
-                      Expanded(
-                        child: CustomPaint(
-                          painter: BoundingBoxPainter(
-                            detections: response.detections!,
-                            imageDimensions: response.imageDimensions,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Stack(
+                      children: [
+                        // Imagem da câmera
+                        SizedBox(
+                          width: 400,
+                          height: 300,
+                          child: Image.file(
+                            imageFile,
+                            fit: BoxFit.contain,
                           ),
                         ),
-                      ),
-                  ],
+                        // Canvas alinhado com a imagem
+                        if (response.detections != null)
+                          Positioned.fill(
+                            child: CustomPaint(
+                              painter: BoundingBoxPainter(
+                                detections: response.detections!,
+                                imageDimensions: response.imageDimensions,
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
