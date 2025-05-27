@@ -91,28 +91,38 @@ class ResultScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    return Stack(
-                      children: [
-                        // Imagem da câmera
-                        SizedBox(
-                          width: 400,
-                          height: 300,
-                          child: Image.file(
-                            imageFile,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        // Canvas alinhado com a imagem
-                        if (response.detections != null)
+                    // Calcula aspect ratio baseado nas dimensões se disponível
+                    double aspectRatio = 4 / 3; // padrão
+
+                    if (response.imageDimensions != null && response.imageDimensions!.length >= 2) {
+                      final width = response.imageDimensions![0].toDouble();
+                      final height = response.imageDimensions![1].toDouble();
+                      aspectRatio = width / height;
+                    }
+
+                    return AspectRatio(
+                      aspectRatio: aspectRatio,
+                      child: Stack(
+                        children: [
+                          // Imagem da câmera
                           Positioned.fill(
-                            child: CustomPaint(
-                              painter: BoundingBoxPainter(
-                                detections: response.detections!,
-                                imageDimensions: response.imageDimensions,
-                              ),
+                            child: Image.file(
+                              imageFile,
+                              fit: BoxFit.contain,
                             ),
                           ),
-                      ],
+                          // Canvas alinhado com a imagem
+                          if (response.detections != null)
+                            Positioned.fill(
+                              child: CustomPaint(
+                                painter: BoundingBoxPainter(
+                                  detections: response.detections!,
+                                  imageDimensions: response.imageDimensions,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -190,6 +200,14 @@ class ResultScreen extends StatelessWidget {
                                   ),
                                 ),
                               ],
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'Posição: [${detection.bbox.map((v) => v.toStringAsFixed(0)).join(', ')}]',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade500,
+                              ),
                             ),
                           ],
                         ),
