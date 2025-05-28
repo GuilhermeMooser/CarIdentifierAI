@@ -1,6 +1,4 @@
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../models/detection_result.dart';
@@ -17,7 +15,6 @@ class BoundingBoxPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (imageDimensions == null || imageDimensions!.length < 2) {
-      print("BoundingBoxPainter: imageDimensions está nulo ou incompleto");
       return;
     }
 
@@ -33,12 +30,6 @@ class BoundingBoxPainter extends CustomPainter {
       final x2 = detection.bbox[2] * scaleX;
       final y2 = detection.bbox[3] * scaleY;
 
-      print('DENTRO DO PAINT - DETECÇÃO: ${detection.className}');
-      print('bbox: ${detection.bbox}');
-      print('retângulo: x1=$x1, y1=$y1, x2=$x2, y2=$y2');
-      print('Canvas size: $size'); // Tamanho do CustomPaint
-      print('ImageDimensions: $imageDimensions'); // [largura, altura]
-      print('scaleX = ${scaleX}, scaleY = ${scaleY}');
       final rect = Rect.fromLTRB(x1, y1, x2, y2);
 
       // Borda preta externa

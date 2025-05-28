@@ -10,7 +10,6 @@ class ApiService {
   late final Dio _dio;
   // static const String baseUrl = 'http://10.0.2.2:8000'; // Android emulator
   static const String baseUrl = 'http://192.168.1.7:8000';
-  // Para dispositivo físico use: 'http://SEU_IP:8000'
 
   ApiService() {
     _dio = Dio(BaseOptions(
